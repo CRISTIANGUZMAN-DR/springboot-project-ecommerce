@@ -1,14 +1,22 @@
 package com.cguzman.springboot_project_ecommerce.entities.Dto;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 public class OrderDto {
+
     private Long id;
+    @NotNull
     private Long userId;
     private String nameUser;
-    private LocalDateTime date;
-    private BigDecimal total;
+    private LocalDateTime date = LocalDateTime.now();
+    private BigDecimal total = BigDecimal.valueOf(0);
+
+    private Set<OrderItemDto> items = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -48,5 +56,13 @@ public class OrderDto {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public Set<OrderItemDto> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<OrderItemDto> items) {
+        this.items = items;
     }
 }

@@ -1,22 +1,13 @@
-package com.cguzman.springboot_project_ecommerce.entities;
+package com.cguzman.springboot_project_ecommerce.entities.Dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-@Entity
-@Table(name = "products")
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ProductDto {
     @NotNull(message = "No puede estar nulo")
     @NotBlank(message = "No puede estar vacio")
     private String name;
@@ -27,21 +18,9 @@ public class Product {
     @NotNull(message = "No puede estar nulo")
     @Min(100)
     private BigDecimal price;
+    private List<Long> categoryIds;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "products_categories",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories = new HashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public ProductDto() {
     }
 
     public String getName() {
@@ -68,11 +47,11 @@ public class Product {
         this.price = price;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public List<Long> getCategoryIds() {
+        return categoryIds;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+    public void setCategoryIds(List<Long> categoryIds) {
+        this.categoryIds = categoryIds;
     }
 }

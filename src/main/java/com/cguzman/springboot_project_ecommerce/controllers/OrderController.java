@@ -29,8 +29,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDto> save(@Valid @RequestBody Order order){
-        return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.save(order));
+    public ResponseEntity<OrderDto> save(@Valid @RequestBody OrderDto orderDto){
+        return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.saveOrderDto(orderDto));
     }
 
     @DeleteMapping

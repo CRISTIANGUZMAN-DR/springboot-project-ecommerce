@@ -1,6 +1,7 @@
 package com.cguzman.springboot_project_ecommerce.services;
 
 import com.cguzman.springboot_project_ecommerce.entities.Category;
+import com.cguzman.springboot_project_ecommerce.entities.Dto.ProductDto;
 import com.cguzman.springboot_project_ecommerce.entities.Product;
 import com.cguzman.springboot_project_ecommerce.exceptions.RegistryNotFoundException;
 import com.cguzman.springboot_project_ecommerce.repositories.CategoryRepository;
@@ -40,6 +41,21 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Transactional
+    public Product saveWithCategories(ProductDto productDto) {
+        Product product = new Product();
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setStock(productDto.getStock());
+        if (productDto.getCategoryIds() != null && !productDto.getCategoryIds().isEmpty()){
+            productDto.getCategoryIds().forEach(id ->{
+                Category category = categoryRepository.findById(id).orElseThrow(() -> new RegistryNotFoundException("No se encontró una categoria con el id: " + id));
+                product.getCategories().add(category);
+            });
+        };
+       return productRepository.save(product);
+    }
+
+    @Transactional
     @Override
     public void deleteById(Long id) {
         this.findById(id);
@@ -58,17 +74,12 @@ public class ProductServiceImpl implements ProductService{
 
     @Transactional
     @Override
-    public Product saveCategoryProduct(Product product) {
-        return null;
-    }
+    public Product addCategory(Long productId, Long categoryId) {
+        Product product = productRepository.findById(productId).orElseThrow(()-> new RegistryNotFoundException("Producto no encontrado"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new RegistryNotFoundException("Categoria no encontrada"));
 
-    /*@Transactional
-    @Override
-    public Product saveCategoryProduct(Product product){
-        Optional<Product> optionalProduct = productRepository.findById(product.getId());
-        Optional<Category> optionalCategory = categoryRepository.findById(product.getCategories().);
-        optionalProduct.ifPresent(product1 -> {
-            categoryRepository
-        });
-    }*/
+        product.getCategories().add(category);
+
+        return productRepository.save(product);
+    }
 }

@@ -17,18 +17,19 @@ public class Order {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    private BigDecimal total;
+
+    private BigDecimal total = BigDecimal.valueOf(0);
 
 
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<OrderItem> items;
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order(){
-        this.items = new HashSet<>();
     }
 
 

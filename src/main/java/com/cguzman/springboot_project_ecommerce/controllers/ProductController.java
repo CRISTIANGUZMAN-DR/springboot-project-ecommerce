@@ -1,5 +1,6 @@
 package com.cguzman.springboot_project_ecommerce.controllers;
 
+import com.cguzman.springboot_project_ecommerce.entities.Dto.ProductDto;
 import com.cguzman.springboot_project_ecommerce.entities.Product;
 import com.cguzman.springboot_project_ecommerce.services.ProductService;
 import jakarta.validation.Valid;
@@ -28,8 +29,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> save(@Valid @RequestBody Product product){
-        return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.save(product));
+    public ResponseEntity<Product> save(@Valid @RequestBody ProductDto productDto){
+        return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.saveWithCategories(productDto));
     }
 
     @DeleteMapping
@@ -43,8 +44,8 @@ public class ProductController {
         return ResponseEntity.ok(service.update(id, product));
     }
 
-    @PostMapping("/category")
-    public ResponseEntity<?> saveCategoryProduct(@RequestBody Product product){
-        return null;
+    @PostMapping("/{productId}/category/{categoryId}")
+    public ResponseEntity<?> addCategory(@PathVariable Long productId, @PathVariable Long categoryId){
+        return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.addCategory(productId, categoryId));
     }
 }
