@@ -14,7 +14,7 @@ public class OrderDto {
     private Long userId;
     private String nameUser;
     private LocalDateTime date = LocalDateTime.now();
-    private BigDecimal total = BigDecimal.valueOf(0);
+    private BigDecimal total;
 
     private Set<OrderItemDto> items = new HashSet<>();
 

@@ -1,33 +1,37 @@
 package com.cguzman.springboot_project_ecommerce.entities.Dto;
 
+import com.cguzman.springboot_project_ecommerce.entities.OrderItem;
+
 import java.math.BigDecimal;
+import java.util.Set;
 
 public class OrderItemDto {
 
-        private Long id;
+    private Long id;
 
-        private Long productId;
-        private String productName;
+    private Long productId;
+    private String productName;
 
 
-        private Integer quantity;
-        private BigDecimal price;
+    private Integer quantity;
+    private BigDecimal price;
 
-        public Long getId() {
-            return id;
-        }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public Long getProductId() {
-            return productId;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public void setProductId(Long productId) {
-            this.productId = productId;
-        }
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
     public String getProductName() {
         return productName;
@@ -38,18 +42,23 @@ public class OrderItemDto {
     }
 
     public Integer getQuantity() {
-            return quantity;
-        }
+        return quantity;
+    }
 
-        public void setQuantity(Integer quantity) {
-            this.quantity = quantity;
-        }
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
-        public BigDecimal getPrice() {
-            return price;
-        }
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-        public void setPrice(BigDecimal price) {
-            this.price = price;
-        }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal calculatedPrice(OrderItem orderItem) {
+        this.price = orderItem.getProduct().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()));
+        return this.price;
+    }
 }

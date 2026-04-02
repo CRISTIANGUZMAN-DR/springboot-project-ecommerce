@@ -73,4 +73,11 @@ public class Order {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+
+    public void calcularTotalOrder(Set<OrderItem> orderItems) {
+        this.total = BigDecimal.ZERO;
+        orderItems.forEach(item->{
+            this.total = this.total.add(item.getPrice());
+        });
+    }
 }

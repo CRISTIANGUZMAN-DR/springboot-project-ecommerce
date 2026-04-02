@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -57,9 +55,9 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Transactional
+    @Override
     public OrderDto saveOrderDto(OrderDto orderDto) {
         Order order = new Order();
-        order.setTotal(orderDto.getTotal());
         order.setDate(orderDto.getDate());
         User user = userRepository.findById(orderDto.getUserId()).orElseThrow(()-> new RegistryNotFoundException("usuario no encontrado"));
         order.setUser(user);
@@ -68,9 +66,11 @@ public class OrderServiceImpl implements OrderService{
             orderItem.setPrice(orderItemDto.getPrice());
             orderItem.setQuantity(orderItemDto.getQuantity());
             orderItem.setProduct(productRepository.findById(orderItemDto.getProductId()).orElseThrow(() -> new RegistryNotFoundException("No se encontro el producto")));
+            orderItem.setPrice(orderItemDto.calculatedPrice(orderItem));
             order.getItems().add(orderItem);
             orderItem.setOrder(order);
         });
+        order.calcularTotalOrder(order.getItems());
         orderRepository.save(order);
         return saveToOrderDto(order);
     }
@@ -95,6 +95,29 @@ public class OrderServiceImpl implements OrderService{
             return saveToOrderDto(orderRepository.save(orderOld));
         }
         throw new RegistryNotFoundException("No se encontró ninguna orden con ese id");
+    }
+
+    @Transactional
+    @Override
+    public OrderDto updateOrderDto(Long id, OrderDto orderDto) {
+            Order order = orderRepository.findById(id).orElseThrow(()-> new RegistryNotFoundException("No se encontró ninguna orden con ese id"));
+            order.setUser(userRepository.findById(orderDto.getUserId()).orElseThrow(()-> new RegistryNotFoundException("Usuario no encontrado")));
+            order.setDate(orderDto.getDate());
+
+            order.getItems().clear();
+
+            orderDto.getItems().forEach(orderItemDto -> {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setId(orderItemDto.getId());
+                orderItem.setQuantity(orderItemDto.getQuantity());
+                orderItem.setPrice(orderItemDto.getPrice());
+                orderItem.setProduct(productRepository.findById(orderItemDto.getProductId()).orElseThrow(()-> new RegistryNotFoundException("Producto no encontrado")));
+                orderItem.setPrice(orderItemDto.calculatedPrice(orderItem));
+                orderItem.setOrder(order);
+                order.getItems().add(orderItem);
+            });
+            order.calcularTotalOrder(order.getItems());
+            return saveToOrderDto(orderRepository.save(order));
     }
 
 

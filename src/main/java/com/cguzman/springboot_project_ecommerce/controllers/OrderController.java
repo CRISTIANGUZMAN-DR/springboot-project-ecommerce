@@ -33,15 +33,15 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.saveOrderDto(orderDto));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteById(Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id){
         service.deleteById(id);
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping
-    public ResponseEntity<OrderDto> update(Long id, @Valid @RequestBody Order order){
-        return ResponseEntity.ok(service.update(id, order));
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDto> update(@PathVariable Long id, @Valid @RequestBody OrderDto orderDto){
+        return ResponseEntity.ok(service.updateOrderDto(id, orderDto));
     }
 
 }
