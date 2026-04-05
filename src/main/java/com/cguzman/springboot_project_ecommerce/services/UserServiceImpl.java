@@ -4,6 +4,7 @@ import com.cguzman.springboot_project_ecommerce.entities.Dto.UserDto;
 import com.cguzman.springboot_project_ecommerce.entities.User;
 import com.cguzman.springboot_project_ecommerce.exceptions.RegistryNotFoundException;
 import com.cguzman.springboot_project_ecommerce.repositories.UserRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = (List<User>) userRepository.findAll();
         List<UserDto> listUserDto = new ArrayList<>();
         users.forEach(user -> {
-            UserDto userDto = saveDto(user);
+            UserDto userDto = saveUserDto(user);
             listUserDto.add(userDto);
         });
 
@@ -35,14 +36,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findById(Long id) {
         return  userRepository.findById(id)
-                .map(this::saveDto)
+                .map(this::saveUserDto)
                 .orElseThrow(() -> new RegistryNotFoundException("No se encontró ningún usuario relacionado con el id"));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public @Nullable UserDto findByEmail(String email) {
+        return userRepository.findByEmail(email).map(this::saveUserDto).orElseThrow(()-> new RegistryNotFoundException("No se encontró ningun usuario con ese mail"));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserDto> findByNameContaining(String name) {
+        List<User> users = userRepository.findByNameContaining(name);
+        List<UserDto> userDtos = new ArrayList<>();
+        users.forEach(user -> {
+            userDtos.add(saveUserDto(user));
+        });
+        if(userDtos.isEmpty()){
+            throw new RegistryNotFoundException("No se encontró ningun usuario con esas characteristics de nombre");
+        }
+        return userDtos;
     }
 
     @Transactional
     @Override
     public UserDto save(User user) {
-        return saveDto(userRepository.save(user));
+        return saveUserDto(userRepository.save(user));
     }
 
     @Transactional
@@ -66,12 +87,12 @@ public class UserServiceImpl implements UserService {
             userOld.setEmail(user.getEmail());
             userOld.setPassword(user.getPassword());
             userOld.setActive(user.getActive());
-            return saveDto(userRepository.save(userOld));
+            return saveUserDto(userRepository.save(userOld));
         }
         throw new RegistryNotFoundException("No se encontró ningún usuario relacionado con el id");
     }
 
-    public UserDto saveDto(User user){
+    public UserDto saveUserDto(User user){
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
@@ -79,4 +100,14 @@ public class UserServiceImpl implements UserService {
         userDto.setActive(user.getActive());
         return userDto;
     }
+
+    @Transactional
+    @Override
+    public void activate(Long id, boolean active) {
+        User user = userRepository.findById(id).orElseThrow(()-> new RegistryNotFoundException("Usuario no encontrado"));
+        user.setActive(active);
+        userRepository.save(user);
+    }
+
+
 }
