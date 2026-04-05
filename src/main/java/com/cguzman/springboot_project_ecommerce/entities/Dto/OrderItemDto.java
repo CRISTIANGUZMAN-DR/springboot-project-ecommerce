@@ -1,20 +1,27 @@
 package com.cguzman.springboot_project_ecommerce.entities.Dto;
 
-import com.cguzman.springboot_project_ecommerce.entities.OrderItem;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 public class OrderItemDto {
 
     private Long id;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotNull
     private Long productId;
-    private String productName;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private ProductDto productDto;
 
-    private Integer quantity;
+    private Integer quantity = 1;
     private BigDecimal price;
+
+    @NotNull
+    private Long orderId;
 
 
     public Long getId() {
@@ -33,14 +40,6 @@ public class OrderItemDto {
         this.productId = productId;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -57,8 +56,19 @@ public class OrderItemDto {
         this.price = price;
     }
 
-    public BigDecimal calculatedPrice(OrderItem orderItem) {
-        this.price = orderItem.getProduct().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()));
-        return this.price;
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public ProductDto getProductDto() {
+        return productDto;
+    }
+
+    public void setProductDto(ProductDto productDto) {
+        this.productDto = productDto;
     }
 }

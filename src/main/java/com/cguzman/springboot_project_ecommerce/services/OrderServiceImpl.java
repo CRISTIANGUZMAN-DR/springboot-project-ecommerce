@@ -19,6 +19,9 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService{
 
     @Autowired
+    private ProductService productService;
+
+    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
@@ -66,7 +69,7 @@ public class OrderServiceImpl implements OrderService{
             orderItem.setPrice(orderItemDto.getPrice());
             orderItem.setQuantity(orderItemDto.getQuantity());
             orderItem.setProduct(productRepository.findById(orderItemDto.getProductId()).orElseThrow(() -> new RegistryNotFoundException("No se encontro el producto")));
-            orderItem.setPrice(orderItemDto.calculatedPrice(orderItem));
+            orderItem.calculatedPrice(orderItem);
             order.getItems().add(orderItem);
             orderItem.setOrder(order);
         });
@@ -112,7 +115,7 @@ public class OrderServiceImpl implements OrderService{
                 orderItem.setQuantity(orderItemDto.getQuantity());
                 orderItem.setPrice(orderItemDto.getPrice());
                 orderItem.setProduct(productRepository.findById(orderItemDto.getProductId()).orElseThrow(()-> new RegistryNotFoundException("Producto no encontrado")));
-                orderItem.setPrice(orderItemDto.calculatedPrice(orderItem));
+                orderItem.calculatedPrice(orderItem);
                 orderItem.setOrder(order);
                 order.getItems().add(orderItem);
             });
@@ -132,9 +135,9 @@ public class OrderServiceImpl implements OrderService{
             OrderItemDto orderItemDto = new OrderItemDto();
             orderItemDto.setId(orderItem.getId());
             orderItemDto.setPrice(orderItem.getPrice());
-            orderItemDto.setProductId(orderItem.getProduct().getId());
-            orderItemDto.setProductName(orderItem.getProduct().getName());
+            orderItemDto.setProductDto(productService.saveProductDto(orderItem.getProduct()));
             orderItemDto.setQuantity(orderItem.getQuantity());
+            orderItemDto.setOrderId(order.getId());
             orderDto.getItems().add(orderItemDto);
         });
         orderDto.setItems(orderDto.getItems());

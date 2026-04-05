@@ -82,4 +82,13 @@ public class ProductServiceImpl implements ProductService{
 
         return productRepository.save(product);
     }
+
+    @Override
+    public ProductDto saveProductDto(Product product){
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setPrice(product.getPrice());
+        return productDto;
+    }
 }

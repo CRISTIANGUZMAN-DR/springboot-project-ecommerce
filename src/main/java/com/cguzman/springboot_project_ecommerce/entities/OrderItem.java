@@ -63,4 +63,8 @@ public class OrderItem {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    public void calculatedPrice(OrderItem orderItem) {
+        this.price = orderItem.getProduct().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()));
+    }
 }
