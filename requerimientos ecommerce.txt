@@ -1,0 +1,40 @@
+⚙️ FUNCIONALIDADES (REQUERIMIENTOS)
+
+👤 Usuarios
+- Crear usuario - check
+- Listar usuarios - check
+- Buscar por email - check
+- Buscar por coincidencia de nombres - check
+- Eliminar usuario, siempre y cuando no este relacionado a una orden check
+
+Pruebas
+- mostrar
+- crear
+- eliminar
+- actualizar completo
+- actualizar parcial
+
+🏷️ Categorías
+- Crear categoría - check
+- Listar categorias
+
+Pruebas
+- mostrar
+- crear
+- eliminar
+- actualizar completo
+
+📦 Productos
+- Crear producto - check
+- Listar productos - check
+- Eliminar productos - check
+- Crear productos con categorias - check
+- Asignar categorías a productos - check
+- Buscar por nombre (query por convención) - check
+- Buscar productos con precio mayor a X - check
+
+🧾 Órdenes
+- Crear orden - check
+- Agregar productos a la orden - check
+- Calcular total automáticamente - check
+- Listar órdenes de un usuario - check
