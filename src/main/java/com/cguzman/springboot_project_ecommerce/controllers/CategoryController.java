@@ -19,12 +19,12 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<Category>> findAll(){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findAll());
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findAll());
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Category> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findById(id));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findById(id));
     }
 
     @PostMapping

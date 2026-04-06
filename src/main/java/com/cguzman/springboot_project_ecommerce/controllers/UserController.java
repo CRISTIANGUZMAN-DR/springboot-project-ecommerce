@@ -31,12 +31,12 @@ public class UserController {
 
     @GetMapping(params = "email")
     public ResponseEntity<UserDto> findByEmail(@RequestParam String email){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByEmail(email));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findByEmail(email));
     }
 
     @GetMapping(params = "name")
     public ResponseEntity<List<UserDto>> findByNameContaining(@RequestParam String name){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByNameContaining(name));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findByNameContaining(name));
     }
 
     @PostMapping

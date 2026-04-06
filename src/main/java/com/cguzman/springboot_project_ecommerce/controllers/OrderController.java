@@ -20,17 +20,17 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<List<OrderDto>> findAll(){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findAll());
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findById(id));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findById(id));
     }
 
     @GetMapping(params = "userId")
     public ResponseEntity<List<OrderDto>> findByUser(@RequestParam Long userId){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByUser(userId));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findByUser(userId));
     }
 
     @PostMapping

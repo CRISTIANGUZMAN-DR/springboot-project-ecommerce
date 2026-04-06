@@ -25,7 +25,7 @@ public class OrderItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderItemDto> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(orderItemService.findById(id));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(orderItemService.findById(id));
     }
 
     @PostMapping

@@ -20,22 +20,22 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> findAll(){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findAll());
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findById(id));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findById(id));
     }
 
     @GetMapping(params = "name")
     public ResponseEntity<Product> findByName(@RequestParam String name){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByName(name));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findByName(name));
     }
 
     @GetMapping(params = "price")
     public ResponseEntity<List<Product>> findByPrice(@RequestParam Integer price){
-        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByPrice(price));
+        return ResponseEntity.status(HttpStatus.OK.value()).body(service.findByPrice(price));
     }
 
     @PostMapping
