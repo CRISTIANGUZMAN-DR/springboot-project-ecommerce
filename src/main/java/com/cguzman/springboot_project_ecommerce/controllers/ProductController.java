@@ -23,9 +23,19 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findAll());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Product> findById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findById(id));
+    }
+
+    @GetMapping(params = "name")
+    public ResponseEntity<Product> findByName(@RequestParam String name){
+        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByName(name));
+    }
+
+    @GetMapping(params = "price")
+    public ResponseEntity<List<Product>> findByPrice(@RequestParam Integer price){
+        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByPrice(price));
     }
 
     @PostMapping
@@ -33,18 +43,18 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.saveWithCategories(productDto));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteById(Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id){
         service.deleteById(id);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping
-    public ResponseEntity<Product> update(Long id, @Valid @RequestBody Product product){
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> update(@PathVariable Long id, @Valid @RequestBody Product product){
         return ResponseEntity.ok(service.update(id, product));
     }
 
-    @PostMapping("/{productId}/category/{categoryId}")
+    @PatchMapping("/{productId}/category/{categoryId}")
     public ResponseEntity<?> addCategory(@PathVariable Long productId, @PathVariable Long categoryId){
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.addCategory(productId, categoryId));
     }

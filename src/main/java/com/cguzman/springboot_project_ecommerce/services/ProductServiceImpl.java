@@ -34,6 +34,18 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.findById(id).orElseThrow(()-> new RegistryNotFoundException("No se encontró el producto con ese id"));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Product findByName(String name) {
+        return productRepository.findByName(name).orElseThrow(()-> new RegistryNotFoundException("No se encontro el producto"));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Product> findByPrice(Integer price) {
+        return productRepository.findByPrice(price);
+    }
+
     @Transactional
     @Override
     public Product save(Product product) {

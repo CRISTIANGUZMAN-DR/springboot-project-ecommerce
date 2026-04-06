@@ -45,6 +45,6 @@ public class CategoryServiceImpl implements CategoryService{
     public Category update(Long id, Category category) {
         Category category1 = this.findById(id);
         category1.setName(category.getName());
-        return category1;
+        return this.save(category1);
     }
 }

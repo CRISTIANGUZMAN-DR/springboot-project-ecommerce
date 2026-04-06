@@ -1,6 +1,7 @@
 package com.cguzman.springboot_project_ecommerce.entities.Dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,21 +11,22 @@ import java.util.List;
 
 public class ProductDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotNull(message = "No puede estar nulo")
-    @NotBlank(message = "No puede estar vacio")
+    @NotNull(message = "El name no puede estar nulo")
+    @NotBlank(message = "El name no puede estar vacio")
     private String name;
 
-    @JsonIgnore
-    @NotNull(message = "No puede estar nulo")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotNull(message = "El stock no puede estar nulo")
     private Integer stock;
 
-    @NotNull(message = "No puede estar nulo")
+    @NotNull(message = "El precio no puede estar nulo")
     @Min(100)
     private BigDecimal price;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Long> categoryIds;
 
     public ProductDto() {

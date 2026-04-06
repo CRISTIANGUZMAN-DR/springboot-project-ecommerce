@@ -16,16 +16,8 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull(message = "No puede estar nulo")
-    @NotBlank(message = "No puede estar vacio")
     private String name;
-
-    @NotNull(message = "No puede estar nulo")
     private Integer stock;
-
-    @NotNull(message = "No puede estar nulo")
-    @Min(100)
     private BigDecimal price;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

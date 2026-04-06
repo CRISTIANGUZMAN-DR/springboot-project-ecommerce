@@ -20,9 +20,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     private BigDecimal total = BigDecimal.valueOf(0);
-
 
     private LocalDateTime date = LocalDateTime.now();
 

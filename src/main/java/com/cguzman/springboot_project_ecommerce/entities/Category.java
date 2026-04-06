@@ -1,9 +1,12 @@
 package com.cguzman.springboot_project_ecommerce.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,10 +16,13 @@ import java.util.Set;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotNull(message = "no puede estar nulo")
     @NotBlank(message = "no puede estar vacio")
+    @Size(min = 3, message = "defina la categoria con mas caracteres")
+    @Pattern(regexp = "^[a-zA-Z ]+$", message = "El campo solo debe contener letras")
     private String name;
 
     @JsonIgnore

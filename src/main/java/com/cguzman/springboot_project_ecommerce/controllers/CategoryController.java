@@ -1,9 +1,7 @@
 package com.cguzman.springboot_project_ecommerce.controllers;
 
 import com.cguzman.springboot_project_ecommerce.entities.Category;
-import com.cguzman.springboot_project_ecommerce.entities.Product;
 import com.cguzman.springboot_project_ecommerce.services.CategoryService;
-import com.cguzman.springboot_project_ecommerce.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,14 +32,14 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(service.save(category));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteById(Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id){
         service.deleteById(id);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping
-    public ResponseEntity<Category> update(Long id, @Valid @RequestBody Category category){
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> update(@PathVariable Long id, @Valid @RequestBody Category category){
         return ResponseEntity.ok(service.update(id, category));
     }
 }
