@@ -6,6 +6,7 @@ import com.cguzman.springboot_project_ecommerce.entities.Order;
 import com.cguzman.springboot_project_ecommerce.entities.OrderItem;
 import com.cguzman.springboot_project_ecommerce.entities.User;
 import com.cguzman.springboot_project_ecommerce.exceptions.RegistryNotFoundException;
+import com.cguzman.springboot_project_ecommerce.repositories.OrderItemRepository;
 import com.cguzman.springboot_project_ecommerce.repositories.OrderRepository;
 import com.cguzman.springboot_project_ecommerce.repositories.ProductRepository;
 import com.cguzman.springboot_project_ecommerce.repositories.UserRepository;
@@ -30,6 +31,9 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @Transactional(readOnly = true)
     @Override
     public List<OrderDto> findAll() {
@@ -49,6 +53,17 @@ public class OrderServiceImpl implements OrderService{
             return saveToOrderDto(order.get());
         }
         throw new RegistryNotFoundException("No se encontró ninguna orden con ese id");
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<OrderDto> findByUser(Long id) {
+        List<Order> orders = orderRepository.findByUserId(id);
+        List<OrderDto> orderDtos = new ArrayList<>();
+        orders.forEach(order -> {
+            orderDtos.add(saveToOrderDto(order));
+        });
+        return orderDtos;
     }
 
     @Transactional
@@ -121,6 +136,19 @@ public class OrderServiceImpl implements OrderService{
             });
             order.calcularTotalOrder(order.getItems());
             return saveToOrderDto(orderRepository.save(order));
+    }
+
+    @Transactional
+    @Override
+    public OrderDto updateOrder(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow();
+        order.getItems().forEach(orderItem -> {
+            orderItem.calculatedPrice(orderItem);
+            orderItemRepository.save(orderItem);
+        });
+        order.calcularTotalOrder(order.getItems());
+        orderRepository.save(order);
+        return saveToOrderDto(order);
     }
 
 

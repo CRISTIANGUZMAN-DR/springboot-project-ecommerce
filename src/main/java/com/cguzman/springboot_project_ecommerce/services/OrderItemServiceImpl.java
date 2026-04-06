@@ -72,6 +72,11 @@ public class OrderItemServiceImpl implements OrderItemService{
         orderItem.setProduct(product);
         orderItem.setQuantity(orderItemDto.getQuantity());
         orderItem.calculatedPrice(orderItem);
+
+        order.getItems().add(orderItem);
+        order.calcularTotalOrder(order.getItems());
+        orderRepository.save(order);
+
         OrderItem orderItem1 = orderItemRepository.save(orderItem);
         return saveToOrderItemDto(orderItem1);
     }

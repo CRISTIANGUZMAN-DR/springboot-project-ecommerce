@@ -21,6 +21,7 @@ public class OrderItemDto {
     private BigDecimal price;
 
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long orderId;
 
 

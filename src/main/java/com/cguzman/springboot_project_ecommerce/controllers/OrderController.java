@@ -23,9 +23,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findAll());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<OrderDto> findById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findById(id));
+    }
+
+    @GetMapping(params = "userId")
+    public ResponseEntity<List<OrderDto>> findByUser(@RequestParam Long userId){
+        return ResponseEntity.status(HttpStatus.FOUND.value()).body(service.findByUser(userId));
     }
 
     @PostMapping
@@ -36,12 +41,17 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id){
         service.deleteById(id);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderDto> update(@PathVariable Long id, @Valid @RequestBody OrderDto orderDto){
         return ResponseEntity.ok(service.updateOrderDto(id, orderDto));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<OrderDto> actualizarValores(@PathVariable Long id){
+        return ResponseEntity.ok(service.updateOrder(id));
     }
 
 }
