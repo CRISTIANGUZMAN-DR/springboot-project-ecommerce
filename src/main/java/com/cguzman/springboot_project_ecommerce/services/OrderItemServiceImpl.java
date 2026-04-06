@@ -12,6 +12,7 @@ import org.aspectj.weaver.ast.Or;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class OrderItemServiceImpl implements OrderItemService{
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<OrderItemDto> findAll() {
         List<OrderItem> orderItems = (List<OrderItem>) orderItemRepository.findAll();
@@ -41,28 +43,37 @@ public class OrderItemServiceImpl implements OrderItemService{
         return orderItemDtos;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public OrderItemDto findById(Long id) {
         OrderItem item = orderItemRepository.findById(id).orElseThrow(()-> new RegistryNotFoundException("Item no encontrado"));
         return saveToOrderItemDto(item);
     }
 
+    @Transactional
     @Override
     public OrderItemDto save(OrderItem item) {
         return null;
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         OrderItem orderItem = orderItemRepository.findById(id).orElseThrow(()-> new RegistryNotFoundException("Item no encontrado"));
+        Order order = orderItem.getOrder();
         orderItemRepository.deleteById(id);
+        order.getItems().remove(orderItem);
+        order.calcularTotalOrder(order.getItems());
+        orderRepository.save(order);
     }
 
+    @Transactional
     @Override
     public OrderItemDto update(Long id, OrderItem item) {
         return null;
     }
 
+    @Transactional
     @Override
     public OrderItemDto saveOrderItemDto(OrderItemDto orderItemDto) {
         OrderItem orderItem = new OrderItem();
@@ -81,6 +92,7 @@ public class OrderItemServiceImpl implements OrderItemService{
         return saveToOrderItemDto(orderItem1);
     }
 
+    @Transactional
     @Override
     public @Nullable OrderItemDto updateOrderItemDto(Long id, OrderItemDto orderItemDto) {
         OrderItem orderItem = orderItemRepository.findById(id).orElseThrow(()-> new RegistryNotFoundException("Item no encontrado"));
@@ -90,6 +102,8 @@ public class OrderItemServiceImpl implements OrderItemService{
         orderItem.setOrder(order);
         orderItem.setQuantity(orderItemDto.getQuantity());
         orderItem.calculatedPrice(orderItem);
+        order.calcularTotalOrder(order.getItems());
+        orderRepository.save(order);
         OrderItem orderItem1 = orderItemRepository.save(orderItem);
         return saveToOrderItemDto(orderItem1);
     }
